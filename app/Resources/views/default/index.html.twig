@@ -1,0 +1,8 @@
+{% extends '::base.html.twig' %}
+
+
+{% block body %}
+    {% for fortune in fortunes %}
+        {{ include("default/fortune.html.twig") }}
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,18 @@
+Index: src/AppBundle/Controller/DefaultController.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/AppBundle/Controller/DefaultController.php	(revision )
++++ src/AppBundle/Controller/DefaultController.php	(revision )
+@@ -13,9 +13,7 @@
+      */
+     public function indexAction(Request $request)
+     {
+-        // replace this example code with whatever you need
+-        return $this->render('default/index.html.twig', array(
+-            'base_dir' => realpath($this->container->getParameter('kernel.root_dir').'/..'),
++        $citation = $this->getDoctrine()->getRepository("AppBundle:Fortune")->findAll();
+         ));
+     }
+ }

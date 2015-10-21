@@ -1,0 +1,13 @@
+{% extends '::base.html.twig' %}
+
+
+{% block body %}
+    {% for fortune in fortunes %}
+        <ul>
+            <li>Titre : {{ fortune.title }}</li>
+            <li>Auteur : {{ fortune.author }}</li>
+            <li>Texte : {{ fortune.content }}</li>
+            <li>Date : {% if fortune.createdAt %}{{ fortune.createdAt|date('Y-m-d H:i:s') }}{% endif %}</li>
+        </ul>
+    {% endfor %}
+{% endblock %}
