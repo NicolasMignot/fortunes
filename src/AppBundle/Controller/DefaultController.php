@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Fortune;
+use AppBundle\Form\FortuneType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,12 +24,7 @@ class DefaultController extends Controller
      */
     public function createAction(Request $request)
     {
-        $form = $this->createFormBuilder(new Fortune())
-            ->add('title')
-            ->add('author')
-            ->add('content')
-            ->add('submit', 'submit')
-            ->getForm();
+        $form = $this->createForm(new FortuneType(), new Fortune());
         $form->handleRequest($request);
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
