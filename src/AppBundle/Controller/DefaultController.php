@@ -3,7 +3,9 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Fortune;
+use AppBundle\Entity\Comment;
 use AppBundle\Form\FortuneType;
+use AppBundle\Form\CommentType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -91,11 +93,23 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/{id}", name="byTitle")
+     * @Route("/{id}", name="byId")
      */
-    public function showByTitleAction($id)
+    public function showByIdAction(Request $request, $id)
     {
-        $byTitle=$this->getDoctrine()->getRepository("AppBundle:Fortune")->findTitle($id);
-        return $this->render('default/byTitle.html.twig', array('fortune' => $byTitle));
+        $byId=$this->getDoctrine()->getRepository("AppBundle:Fortune")->find($id);
+        $form = $this->createForm(new CommentType(), new Comment());
+        $form->handleRequest($request);
+        $referer = $this->getRequest()->headers->get('referer');
+        if ($form->isValid()) {
+            $comment = $form->getData();
+            $comment->setFortune($byId);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($comment);
+            $em->flush();
+
+            return $this->redirect($referer);
+        }
+        return $this->render('default/byId.html.twig', array('fortune' => $byId, 'form'=>$form->createView()));
     }
 }

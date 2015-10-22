@@ -1,0 +1,5 @@
+<form action="{{ path("byId", {id: fortune.id}) }}" method="post" novalidate>
+    {{ form_row(form.author) }}
+    {{ form_row(form.content) }}
+    {{ form_rest(form) }}
+</form>

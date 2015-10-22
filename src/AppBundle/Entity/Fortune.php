@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -64,11 +65,17 @@ class Fortune
      */
     private $downVote;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="fortune")
+     */
+    private $comments;
+
     public function __construct()
     {
         $this->upVote = 0;
         $this->downVote = 0;
         $this->createdAt = new \DateTime();
+        $this->comments  = new ArrayCollection();
     }
 
     /**
@@ -232,5 +239,15 @@ class Fortune
     {
         return $this->upVote+$this->downVote;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+
 }
 

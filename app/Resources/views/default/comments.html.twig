@@ -1,0 +1,7 @@
+
+
+{% for comment in fortune.comments %}
+    <p>Auteur : {{ comment.author }}</a></p>
+    <p>Texte : {{ comment.content }}</p>
+    <p>Date : {% if comment.createdAt %}{{ comment.createdAt|date('Y-m-d H:i:s') }}{% endif %}</p>
+{% endfor %}

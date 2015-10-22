@@ -51,14 +51,4 @@ class FortuneRepository extends \Doctrine\ORM\EntityRepository
             ->getQuery()
             ->getSingleResult();
     }
-
-    public function findTitle($id)
-    {
-        return $this->createQueryBuilder('F')
-            ->setMaxResults(1)
-            ->where("F.id = :id")
-            ->setParameter("id", $id)
-            ->getQuery()
-            ->getSingleResult();
-    }
 }
