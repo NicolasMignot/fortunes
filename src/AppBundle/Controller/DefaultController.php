@@ -95,11 +95,11 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/{title}", name="byTitle")
+     * @Route("/{id}", name="byTitle")
      */
-    public function showByTitleAction($title)
+    public function showByTitleAction($id)
     {
-        $byTitle=$this->getDoctrine()->getRepository("AppBundle:Fortune")->findTitle($title);
+        $byTitle=$this->getDoctrine()->getRepository("AppBundle:Fortune")->findTitle($id);
         return $this->render('default/byTitle.html.twig', array('fortune' => $byTitle));
     }
 }
