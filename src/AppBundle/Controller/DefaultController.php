@@ -8,6 +8,7 @@ use AppBundle\Form\FortuneType;
 use AppBundle\Form\CommentType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
@@ -49,8 +50,16 @@ class DefaultController extends Controller
      */
     public function voteUpAction($id)
     {
-        $this->getDoctrine()->getRepository("AppBundle:Fortune")->find($id)->voteUp();
-        $this->getDoctrine()->getManager()->Flush();
+        if (!$this->get('session')->has("votedup".$id) && !$this->get('session')->has("voteddown".$id)){
+            $this->getDoctrine()->getRepository("AppBundle:Fortune")->find($id)->voteUp();
+            $this->getDoctrine()->getManager()->flush();
+            $this->get('session')->set("votedup".$id, "yes");
+            $referer = $this->getRequest()->headers->get('referer');
+            return $this->redirect($referer);
+        }
+        else {
+            $this->NoMultiVote($id);
+        }
         $referer = $this->getRequest()->headers->get('referer');
         return $this->redirect($referer);
 
@@ -61,11 +70,32 @@ class DefaultController extends Controller
      */
     public function voteDownAction($id)
     {
-        $this->getDoctrine()->getRepository("AppBundle:Fortune")->find($id)->voteDown();
-        $this->getDoctrine()->getManager()->Flush();
+        if (!$this->get('session')->has("votedup".$id) && !$this->get('session')->has("voteddown".$id)){
+            $this->getDoctrine()->getRepository("AppBundle:Fortune")->find($id)->voteDown();
+            $this->getDoctrine()->getManager()->flush();
+            $this->get('session')->set("voteddown".$id, "yes");
+            $referer = $this->getRequest()->headers->get('referer');
+            return $this->redirect($referer);
+        }
+        else {
+            $this->NoMultiVote($id);
+        }
         $referer = $this->getRequest()->headers->get('referer');
-        return $this->redirect($referer);
+       return $this->redirect($referer);
 
+    }
+
+    public function NoMultiVote($id) {
+        if (!$this->get('session')->has("votedup".$id) && !$this->get('session')->has("voteddown".$id)){
+            $this->get('session')
+                ->getFlashBag()
+                ->add('error', 'Already voted');
+        }
+        if ($this->get('session')->has("voteddown".$id)) {
+            $this->get('session')
+                ->getFlashBag()
+                ->add('error', 'Already voted');
+        }
     }
 
     public function showBestRatedAction()
@@ -153,6 +183,5 @@ class DefaultController extends Controller
         return $this->redirect($referer);
 
     }
-
 
 }
