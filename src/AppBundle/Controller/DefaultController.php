@@ -93,6 +93,25 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/edit/{id}", name="edit")
+     */
+    public function showEdit(Request $request, $id)
+    {
+        $byId=$this->getDoctrine()->getRepository("AppBundle:Fortune")->find($id);
+        $form = $this->createForm(new FortuneType(), $byId);
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($form->getData());
+            $em->flush();
+
+            return $this->redirectToRoute('byId', array('id' => $id));
+        }
+        return $this->render('default/edit.html.twig', array('fortune' => $byId, 'form'=>$form->createView()));
+    }
+
+
+    /**
      * @Route("/{id}", name="byId", requirements={"id": "\d+"})
      */
     public function showByIdAction(Request $request, $id)
@@ -117,10 +136,9 @@ class DefaultController extends Controller
     /**
      * @Route("/valide", name="valide")
      */
-    public function showForValidation(Request $request)
+    public function showForValidation()
     {
         $fortunes = $this->getDoctrine()->getRepository("AppBundle:Fortune")->notValide();
-        dump($fortunes);
         return $this->render('default/Accept.html.twig', array('fortunes' => $fortunes));
     }
 
@@ -135,4 +153,6 @@ class DefaultController extends Controller
         return $this->redirect($referer);
 
     }
+
+
 }

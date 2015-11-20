@@ -5,4 +5,5 @@
     <li>Date : {% if fortune.createdAt %}{{ fortune.createdAt|date('Y-m-d H:i:s') }}{% endif %}</li>
     <li><a href="{{ path("upVote", {id: fortune.id}) }}">+1</a> <a href="{{ path("downVote", {id: fortune.id}) }}">-1</a></li>
     <li>{{ fortune.resultVote }}</li>
+    <li><a href="{{ path("edit", {id: fortune.id}) }}">modifier la citation</a></li>
 </ul>
