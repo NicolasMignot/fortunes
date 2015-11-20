@@ -51,4 +51,22 @@ class FortuneRepository extends \Doctrine\ORM\EntityRepository
             ->getQuery()
             ->getSingleResult();
     }
+
+    public function valide()
+    {
+        return $this->createQueryBuilder('F')
+            ->orderBy("F.createdAt", "DESC")
+            ->where("F.accept = true")
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function notValide()
+    {
+        return $this->createQueryBuilder('F')
+            ->orderBy("F.createdAt", "DESC")
+            ->where("F.accept = false")
+            ->getQuery()
+            ->getResult();
+    }
 }

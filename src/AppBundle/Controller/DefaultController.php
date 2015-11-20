@@ -17,7 +17,7 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $fortunes = $this->getDoctrine()->getRepository("AppBundle:Fortune")->findAll();
+        $fortunes = $this->getDoctrine()->getRepository("AppBundle:Fortune")->valide();
         return $this->render('default/index.html.twig', array('fortunes' => $fortunes));
     }
 
@@ -93,7 +93,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/{id}", name="byId")
+     * @Route("/{id}", name="byId", requirements={"id": "\d+"})
      */
     public function showByIdAction(Request $request, $id)
     {
@@ -111,5 +111,28 @@ class DefaultController extends Controller
             return $this->redirect($referer);
         }
         return $this->render('default/byId.html.twig', array('fortune' => $byId, 'form'=>$form->createView()));
+    }
+
+
+    /**
+     * @Route("/valide", name="valide")
+     */
+    public function showForValidation(Request $request)
+    {
+        $fortunes = $this->getDoctrine()->getRepository("AppBundle:Fortune")->notValide();
+        dump($fortunes);
+        return $this->render('default/Accept.html.twig', array('fortunes' => $fortunes));
+    }
+
+    /**
+     * @Route("/valide/{id}", name="validation")
+     */
+    public function validation($id)
+    {
+        $this->getDoctrine()->getRepository("AppBundle:Fortune")->find($id)->accept();
+        $this->getDoctrine()->getManager()->Flush();
+        $referer = $this->getRequest()->headers->get('referer');
+        return $this->redirect($referer);
+
     }
 }

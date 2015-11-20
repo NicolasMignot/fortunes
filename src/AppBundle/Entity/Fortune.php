@@ -70,12 +70,18 @@ class Fortune
      */
     private $comments;
 
+    /**
+     * @ORM\Column(name="accept", type="boolean")
+     */
+    private $accept;
+
     public function __construct()
     {
         $this->upVote = 0;
         $this->downVote = 0;
         $this->createdAt = new \DateTime();
         $this->comments  = new ArrayCollection();
+        $this->accept = false;
     }
 
     /**
@@ -248,6 +254,14 @@ class Fortune
         return $this->comments;
     }
 
+    public function accept()
+    {
+        return $this->accept = true;
+    }
 
+    public function getAccept()
+    {
+        return $this->accept;
+    }
 }
 

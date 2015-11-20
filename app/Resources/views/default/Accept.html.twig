@@ -1,0 +1,14 @@
+{% extends '::base.html.twig' %}
+
+
+{% block body %}
+    {% for fortune in fortunes %}
+        <ul>
+            <li>Titre :  <a href="{{ path("byId", {id: fortune.id}) }}">{{ fortune.title }}</a></li>
+            <li>Auteur : <a href="{{ path("byAuthor", {author: fortune.author}) }}">{{ fortune.author }}</a></li>
+            <li>Texte : {{ fortune.content }}</li>
+            <li>Date : {% if fortune.createdAt %}{{ fortune.createdAt|date('Y-m-d H:i:s') }}{% endif %}</li>
+            <li><a href="{{ path("validation", {id: fortune.id}) }}">Validation</a>
+        </ul>
+    {% endfor %}
+{% endblock %}
